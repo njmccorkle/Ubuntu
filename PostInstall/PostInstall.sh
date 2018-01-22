@@ -8,7 +8,8 @@ wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add 
 apt-get update
 apt-get install filebeat
 
-#copy filebeat configuration
+#download and move filebeat configuration
+wget https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat.yml
 cp filebeat.yml /etc/filebeat/filebeat.yml
 
 sudo systemctl restart filebeat
