@@ -9,7 +9,7 @@ apt-get update
 apt-get install filebeat
 
 #download and move filebeat configuration
-wget https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat.yml
+wget -qO https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat.yml
 cp filebeat.yml /etc/filebeat/filebeat.yml
 
 sudo systemctl restart filebeat
