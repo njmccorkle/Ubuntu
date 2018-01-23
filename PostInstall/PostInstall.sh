@@ -12,5 +12,9 @@ apt-get install filebeat
 wget -qO https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat.yml
 cp filebeat.yml /etc/filebeat/filebeat.yml
 
+#move private key
+mkdir -p /etc/pki/tls/certs
+cp logstash-forwarder.crt /etc/pki/tls/certs/
+
 sudo systemctl restart filebeat
 sudo systemctl enable filebeat
