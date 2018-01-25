@@ -58,8 +58,8 @@ set_hostname () {
 	ifdown ens160 && ifup ens160
 }
 
-verify_root
+#verify_root
 verify_args
-install_system_packages
-install_snmpd
-set_hostname
+#install_system_packages
+#install_snmpd
+#set_hostname
