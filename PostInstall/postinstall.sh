@@ -27,12 +27,13 @@ verify_root() {
 
 install_system_packages() {
 	echo "Updating and installing system packages"
-    apt-get -y update
+	apt-get -y update
 	apt-get -y upgrade
 	apt-get -y autoremove
-    # Base packages
-    apt-get -y install openssh-server open-vm-tools ufw vim
+	# Base packages
+	apt-get -y install openssh-server open-vm-tools ufw vim
 
+	#ufw firewall
 	ufw default deny incoming
 	ufw default allow outgoing
 	ufw allow openssh
@@ -42,13 +43,12 @@ install_system_packages() {
 install_snmpd () {
 	echo "Installing snmpd"
 	apt-get -y install snmpd
-	
-	# need to wget snmpd.conf
+	wget https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/snmpd.conf
+	cp snmpd.conf /etc/snmp/snmpd.conf
+	service snmpd restart
 	
 	ufw allow snmp
 	ufw reload
-	cp snmpd.conf /etc/snmp/snmpd.conf
-	service snmpd restart
 }
 
 set_hostname () {
