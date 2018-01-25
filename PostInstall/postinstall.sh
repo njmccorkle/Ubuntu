@@ -4,6 +4,7 @@
 
 verify_root() {
     # Verify running as root:
+	echo "Verifying root"
     if [ "$(id -u)" != "0" ]; then
         if [ $# -ne 0 ]; then
             echo "Failed running with sudo. Exiting." 1>&2
@@ -15,17 +16,50 @@ verify_root() {
     fi
 }
 
+verify_args () {
+	echo "Verifying args"
+	if $# = 1; then
+		echo "Please include a hostname."
+		exit 1
+	fi
+}
+
 install_system_packages() {
+	echo "Updating and installing system packages"
     apt-get -y update
+	apt-get -y upgrade
+	apt-get -y autoremove
     # Base packages
-    apt install -y open_ss
-    # Data sources dependencies:
-    apt install -y libffi-dev libssl-dev libmysqlclient-dev libpq-dev freetds-dev libsasl2-dev
-    # SAML dependency
-    apt install -y xmlsec1
-    # Storage servers
-    apt install -y postgresql redis-server
-    apt install -y supervisor
+    apt-get -y install openssh-server open-vm-tools ufw
+
+	ufw default deny incoming
+	ufw default allow outgoing
+	ufw allow openssh
+	ufw enable
+}
+
+install_snmpd () {
+	echo "Installing snmpd"
+	apt-get -y install snmpd
+	ufw allow snmp
+	ufw reload
+	cp snmpd.conf /etc/snmp/snmpd.conf
+	service snmpd restart
+}
+
+set_hostname () {
+	echo "Setting hostname"
+	cp /etc/hosts /etc/hosts.bak
+	cp /etc/hostname /etc/hostname.bak
+	
+	sed 's/ubuntu/$1/g' /etc/hosts > /etc/hosts
+	echo $1 > /etc/hostname
+	
+	ifdown ens160 && ifup ens160
 }
 
 verify_root
+verify_args
+install_system_packages
+install_snmpd
+set_hostname
