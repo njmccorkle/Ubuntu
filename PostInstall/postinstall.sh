@@ -16,17 +16,14 @@ verify_root() {
     fi
 }
 
-verify_args () {
-	echo "Verifying args "
-	echo $#
-	for i in "$@" ; do
-		echo ARG $i
-	done
+#verify_args () {
+#	echo "Verifying args "
+#	echo $#
 #	if [ $# -ne 1 ]; then
 #		echo "Please include a hostname."
 #		exit 1
-	fi
-}
+#fi
+#}
 
 install_system_packages() {
 	echo "Updating and installing system packages"
@@ -62,8 +59,8 @@ set_hostname () {
 	ifdown ens160 && ifup ens160
 }
 
-#verify_root
-verify_args
-#install_system_packages
-#install_snmpd
-#set_hostname
+verify_root
+#verify_args
+install_system_packages
+install_snmpd
+set_hostname
