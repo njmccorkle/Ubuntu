@@ -17,8 +17,9 @@ verify_root() {
 }
 
 verify_args () {
-	echo "Verifying args $#"
-	if [ "$#" -ne 1 ]; then
+	echo "Verifying args "
+	echo $#
+	if [ $# -ne 1 ]; then
 		echo "Please include a hostname."
 		exit 1
 	fi
