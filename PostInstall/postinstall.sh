@@ -31,20 +31,20 @@ install_system_packages() {
 	apt-get -y upgrade
 	apt-get -y autoremove
     # Base packages
-    apt-get -y install openssh-server open-vm-tools ufw
+    apt-get -y install openssh-server open-vm-tools ufw vim
 
 	ufw default deny incoming
 	ufw default allow outgoing
-	# add force here
 	ufw allow openssh
-	ufw enable
+	ufw --force enable
 }
 
 install_snmpd () {
 	echo "Installing snmpd"
 	apt-get -y install snmpd
+	
 	# need to wget snmpd.conf
-	# add force here
+	
 	ufw allow snmp
 	ufw reload
 	cp snmpd.conf /etc/snmp/snmpd.conf
