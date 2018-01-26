@@ -55,6 +55,8 @@ set_hostname () {
 		echo "$1" > /etc/hostname
 
         ifdown ens160 && ifup ens160
+	
+	hostanme "$1"
  }
  
  install_filebeat() {
