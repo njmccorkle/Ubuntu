@@ -70,7 +70,7 @@ set_hostname () {
 	apt-get install filebeat
 
 	#download and move filebeat configuration
-	wget -qO https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat.yml
+	wget -qO https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat/filebeat.yml
 	cp filebeat.yml /etc/filebeat/filebeat.yml
 
 	#move private key
