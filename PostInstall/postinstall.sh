@@ -12,8 +12,6 @@ verify_root() {
 }
 
 verify_args () {
-        echo "verifying args "
-        echo "$#"
         if [ "$#" -ne 1 ]; then
                 echo "please include a hostname."
                 exit 1
@@ -47,7 +45,7 @@ install_snmpd () {
 }
 
 set_hostname () {
-		echo "setting hostname to "$1" "
+	echo "setting hostname to "$1" "
         cp /etc/hosts /etc/hosts.bak
         cp /etc/hostname /etc/hostname.bak
 
@@ -60,6 +58,7 @@ set_hostname () {
  }
  
  install_filebeat() {
+ 	echo "Installing Filebeat"
 	# Create Beats source list
 	echo "deb https://packages.elastic.co/beats/apt stable main" |  sudo tee -a /etc/apt/sources.list.d/beats.list
 
