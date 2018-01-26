@@ -63,7 +63,7 @@ set_hostname () {
 	echo "deb https://packages.elastic.co/beats/apt stable main" > /etc/apt/sources.list.d/beats.list
 
 	#Get Elasticsearch GPG key
-	wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+	wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 
 	#Update repos and install filebeat
 	apt-get update
@@ -78,8 +78,8 @@ set_hostname () {
 	mkdir -p /etc/pki/tls/certs
 	cp logstash-forwarder.crt /etc/pki/tls/certs/
 
-	sudo systemctl restart filebeat
-	sudo systemctl enable filebeat
+	systemctl restart filebeat
+	systemctl enable filebeat
  }
  
 verify_root
