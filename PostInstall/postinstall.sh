@@ -2,68 +2,75 @@
 #
 # This script does all mccorkle.co post install setup tasks.
 
-# verify_root() {
-    # # Verify running as root:
-	# echo "Verifying root"
-    # if [ "$(id -u)" != "0" ]; then
-        # if [ $# -ne 0 ]; then
-            # echo "Failed running with sudo. Exiting." 1>&2
-            # exit 1
-        # fi
-        # echo "This script must be run as root. Trying to run with sudo."
-        # sudo bash "$0" --with-sudo
-        # exit 0
-    # fi
-# }
+verify_root() {
+	# Verify running as root:
+	echo "Verifying root"
+	if [ "$(id -u)" != "0" ]; then
+		echo "This script must be run as root. Please try again."
+		exit 1
+	fi
+}
+
 
 verify_args () {
-	echo "verifying args "
-	echo $#
-	if [ $# -ne 1 ]; then
-		echo "please include a hostname."
-		exit 1
-fi
+        echo "verifying args "
+        echo "$#"
+        if [ "$#" -ne 1 ]; then
+                echo "please include a hostname."
+                exit 1
+        fi
 }
 
 install_system_packages() {
-	echo "Updating and installing system packages"
-	apt-get -y update
-	apt-get -y upgrade
-	apt-get -y autoremove
-	# Base packages
-	apt-get -y install openssh-server open-vm-tools ufw vim
+        echo "Updating and installing system packages"
+        apt-get -y update
+        apt-get -y upgrade
+        apt-get -y autoremove
+        # Base packages
+        apt-get -y install openssh-server open-vm-tools ufw vim
 
-	#ufw firewall
-	ufw default deny incoming
-	ufw default allow outgoing
-	ufw allow openssh
-	ufw --force enable
+        #ufw firewall
+        ufw default deny incoming
+        ufw default allow outgoing
+        ufw allow openssh
+        ufw --force enable
 }
 
 install_snmpd () {
-	echo "Installing snmpd"
-	apt-get -y install snmpd
-	wget https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/snmpd.conf
-	cp snmpd.conf /etc/snmp/snmpd.conf
-	service snmpd restart
-	
-	ufw allow snmp
-	ufw reload
+        echo "Installing snmpd"
+        apt-get -y install snmpd
+        wget https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/snmpd.conf
+        cp snmpd.conf /etc/snmp/snmpd.conf
+        service snmpd restart
+
+        ufw allow snmp
+        ufw reload
 }
 
 set_hostname () {
-	echo "Setting hostname"
-	cp /etc/hosts /etc/hosts.bak
-	cp /etc/hostname /etc/hostname.bak
-	
-	sed 's/ubuntu/$1/g' /etc/hosts > /etc/hosts
-	echo $1 > /etc/hostname
-	
-	ifdown ens160 && ifup ens160
-}
+		echo "setting hostname to "$1" "
+        cp /etc/hosts /etc/hosts.bak
+        cp /etc/hostname /etc/hostname.bak
 
-# verify_root
-verify_args
-# install_system_packages
-# install_snmpd
-# set_hostname
+        sed 's/ubuntu/'"$1"'/g' /etc/hosts > /etc/hosts.new
+		mv /etc/hosts.new /etc/hosts
+
+		echo "$1" > /etc/hostname
+
+        ifdown ens160 && ifup ens160
+ }
+ 
+ 
+ 
+verify_root
+verify_args "$@"
+read -p "This will set the hostname to $1 and install all packages. Continue? Y/N" -n 1 -r
+echo    # move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+fi
+
+set_hostname "$@"
+install_system_packages
+install_snmpd
