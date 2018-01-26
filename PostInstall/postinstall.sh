@@ -60,7 +60,7 @@ set_hostname () {
  install_filebeat() {
  	echo "Installing Filebeat"
 	# Create Beats source list
-	echo "deb https://packages.elastic.co/beats/apt stable main" |  sudo tee -a /etc/apt/sources.list.d/beats.list
+	echo "deb https://packages.elastic.co/beats/apt stable main" > /etc/apt/sources.list.d/beats.list
 
 	#Get Elasticsearch GPG key
 	wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
