@@ -2,28 +2,28 @@
 #
 # This script does all mccorkle.co post install setup tasks.
 
-verify_root() {
-    # Verify running as root:
-	echo "Verifying root"
-    if [ "$(id -u)" != "0" ]; then
-        if [ $# -ne 0 ]; then
-            echo "Failed running with sudo. Exiting." 1>&2
-            exit 1
-        fi
-        echo "This script must be run as root. Trying to run with sudo."
-        sudo bash "$0" --with-sudo
-        exit 0
-    fi
-}
+# verify_root() {
+    # # Verify running as root:
+	# echo "Verifying root"
+    # if [ "$(id -u)" != "0" ]; then
+        # if [ $# -ne 0 ]; then
+            # echo "Failed running with sudo. Exiting." 1>&2
+            # exit 1
+        # fi
+        # echo "This script must be run as root. Trying to run with sudo."
+        # sudo bash "$0" --with-sudo
+        # exit 0
+    # fi
+# }
 
-#verify_args () {
-#	echo "Verifying args "
-#	echo $#
-#	if [ $# -ne 1 ]; then
-#		echo "Please include a hostname."
-#		exit 1
-#fi
-#}
+verify_args () {
+	echo "verifying args "
+	echo $#
+	if [ $# -ne 1 ]; then
+		echo "please include a hostname."
+		exit 1
+fi
+}
 
 install_system_packages() {
 	echo "Updating and installing system packages"
@@ -62,8 +62,8 @@ set_hostname () {
 	ifdown ens160 && ifup ens160
 }
 
-verify_root
-#verify_args
-install_system_packages
-install_snmpd
-set_hostname
+# verify_root
+verify_args
+# install_system_packages
+# install_snmpd
+# set_hostname
