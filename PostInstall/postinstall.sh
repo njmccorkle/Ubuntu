@@ -61,29 +61,49 @@ set_hostname () {
 	hostanme "$1"
  }
  
- install_filebeat() {
- 	echo "Installing Filebeat"
-	# Create Beats source list
+ setup_elastic_sources() {
+ 	# Create Beats source list
 	echo "deb https://packages.elastic.co/beats/apt stable main" > /etc/apt/sources.list.d/beats.list
 
 	#Get Elasticsearch GPG key
 	wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-
-	#Update repos and install filebeat
+	
 	apt-get update
-	apt-get install filebeat
+	
+	#move private key
+	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat/logstash-forwarder.crt
+	mkdir -p /etc/pki/tls/certs
+	cp logstash-forwarder.crt /etc/pki/tls/certs/
+ }
+ 
+ install_filebeat() {
+ 	echo "Installing Filebeat"
+	
+	#Install filebeat
+	apt-get -y install filebeat
 
 	#download and move filebeat configuration
 	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat/filebeat.yml
 	cp filebeat.yml /etc/filebeat/filebeat.yml
 
-	#move private key
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat/logstash-forwarder.crt
-	mkdir -p /etc/pki/tls/certs
-	cp logstash-forwarder.crt /etc/pki/tls/certs/
-
+	#restart and enable services
 	systemctl restart filebeat
 	systemctl enable filebeat
+ }
+ 
+ install_packetbeat() {
+ 	echo "Installing Packetbeat"
+	
+	#Install Packetbeat
+	apt-get -y install packetbeat
+	
+	#download and move packetbeat configuration
+	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/packetbeat.yml
+	cp packetbeat.yml /etc/packetbeat/packetbeat.yml
+	
+	#restart and enable services
+	systemctl restart packetbeat
+	systemctl enable packetbeat
  }
  
 verify_root
@@ -98,4 +118,6 @@ fi
 set_hostname "$@"
 install_system_packages
 install_snmpd
+setup_elastic_sources
 install_filebeat
+install_packetbeat
