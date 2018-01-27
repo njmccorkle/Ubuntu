@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # This script does all mccorkle.co post install setup tasks.
+# assumes that open-vm-tools, openssh-server, snmpd, build-essential, and ufw were installed during installation
 
 verify_root() {
 	# Verify running as root:
@@ -24,9 +25,10 @@ install_system_packages() {
         apt-get -y upgrade
         apt-get -y autoremove
         # Base packages
-        apt-get -y install openssh-server open-vm-tools ufw vim apt-transport-https
+        #apt-get -y install openssh-server open-vm-tools vim apt-transport-https
 
         #ufw firewall
+	apt-get -y install ufw
         ufw default deny incoming
         ufw default allow outgoing
         ufw allow openssh
