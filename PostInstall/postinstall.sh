@@ -38,7 +38,7 @@ install_system_packages() {
 install_snmpd () {
         echo "Installing snmpd"
         apt-get -y install snmpd
-        wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/snmpd.conf
+        wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/snmpd.conf
         cp snmpd.conf /etc/snmp/snmpd.conf
         service snmpd restart
 
@@ -71,7 +71,7 @@ set_hostname () {
 	apt-get update
 	
 	#move private key
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat/logstash-forwarder.crt
+	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/logstash-forwarder.crt
 	mkdir -p /etc/pki/tls/certs
 	cp logstash-forwarder.crt /etc/pki/tls/certs/
  }
@@ -83,7 +83,7 @@ set_hostname () {
 	apt-get -y install filebeat
 
 	#download and move filebeat configuration
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/filebeat/filebeat.yml
+	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/filebeat.yml
 	cp filebeat.yml /etc/filebeat/filebeat.yml
 
 	#restart and enable services
