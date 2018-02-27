@@ -71,9 +71,9 @@ set_hostname () {
 	apt-get update
 	
 	#move private key
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/logstash-forwarder.crt
+	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/logstash-public.crt
 	mkdir -p /etc/pki/tls/certs
-	cp logstash-forwarder.crt /etc/pki/tls/certs/
+	cp logstash-public.crt /etc/pki/tls/certs/
  }
  
  install_filebeat() {
@@ -120,4 +120,4 @@ install_system_packages
 install_snmpd
 setup_elastic_sources
 install_filebeat
-install_packetbeat
+#install_packetbeat
