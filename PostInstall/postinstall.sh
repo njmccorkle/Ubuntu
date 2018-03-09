@@ -87,8 +87,9 @@ set_hostname () {
 	cp filebeat.yml /etc/filebeat/filebeat.yml
 
 	#restart and enable services
-	systemctl restart filebeat
+	systemctl daemon-reload
 	systemctl enable filebeat
+	systemctl restart filebeat
  }
  
  install_packetbeat() {
@@ -102,8 +103,9 @@ set_hostname () {
 	cp packetbeat.yml /etc/packetbeat/packetbeat.yml
 	
 	#restart and enable services
-	systemctl restart packetbeat
+	systemctl daemon-reload
 	systemctl enable packetbeat
+	systemctl start packetbeat
  }
  
 verify_root
