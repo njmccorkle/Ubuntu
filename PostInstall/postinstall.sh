@@ -25,7 +25,7 @@ install_system_packages() {
         apt-get -y upgrade
         apt-get -y autoremove
         # Base packages
-        #apt-get -y install openssh-server open-vm-tools vim apt-transport-https
+        apt-get -y install openssh-server open-vm-tools vim apt-transport-https build-essential
 
         #ufw firewall
 	apt-get -y install ufw
