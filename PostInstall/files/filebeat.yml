@@ -18,7 +18,7 @@ output.logstash:
   enabled: true
   hosts: ["elk.mccorkle.co:5044"]
   # bulk_max_size: 1024
-
+  
   ssl.enabled: true
   ssl.certificate_authorities: ["/etc/pki/tls/certs/logstash-public.crt"]
 
