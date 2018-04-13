@@ -49,7 +49,10 @@ packetbeat.protocols:
 
 setup.template.settings:
   index.number_of_shards: 3
- 
+
 output.logstash:
   hosts: ["elk.mccorkle.co:5044"]
   ssl.certificate_authorities: ["/etc/pki/tls/certs/logstash-public.crt"]
+
+#setup.kibana:
+#host: "localhost:5601"
