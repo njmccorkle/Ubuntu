@@ -108,6 +108,22 @@ set_hostname () {
 	systemctl start packetbeat
  }
  
+  install_metricbeat() {
+ 	echo "Installing Metricbeat"
+	
+	#Install Metricbeat
+	apt-get -y install metricbeat
+	
+	#download and move packetbeat configuration
+	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/metricbeat.yml
+	cp metricbeat.yml /etc/metricbeat/metricbeat.yml
+	
+	#restart and enable services
+	systemctl daemon-reload
+	systemctl enable metricbeat
+	systemctl start metricbeat
+ }
+ 
 verify_root
 verify_args "$@"
 read -p "This will set the hostname to $1 and install all packages. Continue? Y/N" -n 1 -r
@@ -122,4 +138,5 @@ install_system_packages
 install_snmpd
 setup_elastic_sources
 install_filebeat
-#install_packetbeat
+install_packetbeat
+install_metricbeat
