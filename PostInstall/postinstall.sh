@@ -52,9 +52,8 @@ set_hostname () {
         cp /etc/hostname /etc/hostname.bak
 
         sed 's/ubuntu/'"$1"'/g' /etc/hosts > /etc/hosts.new
-		mv /etc/hosts.new /etc/hosts
-
-		echo "$1" > /etc/hostname
+	mv /etc/hosts.new /etc/hosts
+	echo "$1" > /etc/hostname
 
         ifdown ens160 && ifup ens160
 	
