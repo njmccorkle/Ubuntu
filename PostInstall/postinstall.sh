@@ -141,3 +141,5 @@ setup_elastic_sources
 install_filebeat
 install_packetbeat
 install_metricbeat
+
+reboot
