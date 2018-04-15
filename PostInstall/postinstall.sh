@@ -86,6 +86,7 @@ set_hostname () {
 	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/filebeat.yml
 	cp filebeat.yml /etc/filebeat/filebeat.yml
 
+	(cd /etc/filebeat/; sudo /usr/share/filebeat/bin/filebeat modules enable system)
 	#restart and enable services
 	systemctl daemon-reload
 	systemctl enable filebeat
