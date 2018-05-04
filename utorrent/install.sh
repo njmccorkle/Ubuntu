@@ -1,11 +1,18 @@
-mkuser utorrent uid 1010 gid 1010
+#!/bin/bash
+#create utorrent user with uid/gid that match user on FreeNAS server
+groupadd -gid 1010 utorrent
+adduser -uid 1010 -gid 1010 --system utorrent 
 
-change to utorrent user
+#change to utorrent user
+su - utorrent -s /bin/bash
 
-download vimrc and save as ~/.vimrc
-
+#not necessary. using a system account
+#download vimrc and save as ~/.vimrc 
 #ssh
 download ssh stuff to ~/.ssh/.....
+
+
+# start here
 
 #setup shares
 apt-get install cifs-utils
