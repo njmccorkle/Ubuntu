@@ -1,0 +1,1 @@
+wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/Update_all/update_all.sh && chmod +x update_all.sh && sudo ./update_all.sh
