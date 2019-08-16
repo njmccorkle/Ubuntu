@@ -19,33 +19,6 @@ verify_args () {
         fi
 }
 
-install_system_packages() {
-        echo "Updating and installing system packages"
-        apt-get -y update
-        apt-get -y upgrade
-        apt-get -y autoremove
-        # Base packages
-        apt-get -y install openssh-server open-vm-tools vim apt-transport-https build-essential
-
-        #ufw firewall
-	apt-get -y install ufw
-        ufw default deny incoming
-        ufw default allow outgoing
-        ufw allow openssh
-        ufw --force enable
-}
-
-install_snmpd () {
-        echo "Installing snmpd"
-        apt-get -y install snmpd
-        wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/snmpd.conf
-        cp snmpd.conf /etc/snmp/snmpd.conf
-        service snmpd restart
-
-        ufw allow snmp
-        ufw reload
-}
-
 set_hostname () {
 	echo "setting hostname to "$1" "
         cp /etc/hosts /etc/hosts.bak
@@ -59,71 +32,97 @@ set_hostname () {
 	
 	hostanme "$1"
  }
- 
- setup_elastic_sources() {
- 	# Create Beats source list
-	#echo "deb https://packages.elastic.co/beats/apt stable main" > /etc/apt/sources.list.d/beats.list
-	echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
 
-	#Get Elasticsearch GPG key
-	wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-	
-	apt-get update
-	
-	#move private key
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/logstash-public.crt
-	mkdir -p /etc/pki/tls/certs
-	cp logstash-public.crt /etc/pki/tls/certs/
- }
- 
- install_filebeat() {
- 	echo "Installing Filebeat"
-	
-	#Install filebeat
-	apt-get -y install filebeat
+install_system_packages() {
+        echo "Updating and installing system packages"
+        apt -y update
+        apt -y upgrade
+        apt -y autoremove
+        apt -y install open-vm-tools snmpd build-essential ufw openssh-server open-vm-tools vim apt-transport-https build-essential
 
-	#download and move filebeat configuration
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/filebeat.yml
-	cp filebeat.yml /etc/filebeat/filebeat.yml
+        #ufw firewall
+        apt -y install ufw
+        ufw default deny incoming
+        ufw default allow outgoing
+        ufw allow openssh
+        ufw --force enable
+}
 
-	(cd /etc/filebeat/; sudo /usr/share/filebeat/bin/filebeat modules enable system)
-	#restart and enable services
-	systemctl daemon-reload
-	systemctl enable filebeat
-	systemctl restart filebeat
- }
+# install_snmpd () {
+        # echo "Installing snmpd"
+        # apt -y install snmpd
+        # wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/snmpd.conf
+        # cp snmpd.conf /etc/snmp/snmpd.conf
+        # service snmpd restart
+
+        # ufw allow snmp
+        # ufw reload
+# }
+
+ # setup_elastic_sources() {
+ 	# # Create Beats source list
+	# #echo "deb https://packages.elastic.co/beats/apt stable main" > /etc/apt/sources.list.d/beats.list
+	# echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-6.x.list
+
+	# #Get Elasticsearch GPG key
+	# wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+	
+	# apt update
+	
+	# #move private key
+	# wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/logstash-public.crt
+	# mkdir -p /etc/pki/tls/certs
+	# cp logstash-public.crt /etc/pki/tls/certs/
+ # }
  
- install_packetbeat() {
- 	echo "Installing Packetbeat"
+ # install_filebeat() {
+ 	# echo "Installing Filebeat"
 	
-	#Install Packetbeat
-	apt-get -y install packetbeat
-	
-	#download and move packetbeat configuration
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/packetbeat.yml
-	cp packetbeat.yml /etc/packetbeat/packetbeat.yml
-	
-	#restart and enable services
-	systemctl daemon-reload
-	systemctl enable packetbeat
-	systemctl start packetbeat
- }
+	# #Install filebeat
+	# apt -y install filebeat
+
+	# #download and move filebeat configuration
+	# wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/filebeat.yml
+	# cp filebeat.yml /etc/filebeat/filebeat.yml
+
+	# (cd /etc/filebeat/; /usr/share/filebeat/bin/filebeat modules enable system)
+	# #restart and enable services
+	# systemctl daemon-reload
+	# systemctl enable filebeat
+	# systemctl restart filebeat
+ # }
  
-  install_metricbeat() {
- 	echo "Installing Metricbeat"
+ # install_packetbeat() {
+ 	# echo "Installing Packetbeat"
 	
-	#Install Metricbeat
-	apt-get -y install metricbeat
+	# #Install Packetbeat
+	# apt -y install packetbeat
 	
-	#download and move packetbeat configuration
-	wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/metricbeat.yml
-	cp metricbeat.yml /etc/metricbeat/metricbeat.yml
+	# #download and move packetbeat configuration
+	# wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/packetbeat.yml
+	# cp packetbeat.yml /etc/packetbeat/packetbeat.yml
 	
-	#restart and enable services
-	systemctl daemon-reload
-	systemctl enable metricbeat
-	systemctl start metricbeat
- }
+	# #restart and enable services
+	# systemctl daemon-reload
+	# systemctl enable packetbeat
+	# systemctl start packetbeat
+ # }
+ 
+  # install_metricbeat() {
+ 	# echo "Installing Metricbeat"
+	
+	# #Install Metricbeat
+	# apt -y install metricbeat
+	
+	# #download and move packetbeat configuration
+	# wget -q https://raw.githubusercontent.com/njmccorkle/Ubuntu/master/PostInstall/files/metricbeat.yml
+	# cp metricbeat.yml /etc/metricbeat/metricbeat.yml
+	
+	# #restart and enable services
+	# systemctl daemon-reload
+	# systemctl enable metricbeat
+	# systemctl start metricbeat
+ # }
  
 verify_root
 verify_args "$@"
@@ -136,10 +135,10 @@ fi
 
 set_hostname "$@"
 install_system_packages
-install_snmpd
-setup_elastic_sources
-install_filebeat
-install_packetbeat
-install_metricbeat
+# install_snmpd
+# setup_elastic_sources
+# install_filebeat
+# install_packetbeat
+# install_metricbeat
 
 reboot
